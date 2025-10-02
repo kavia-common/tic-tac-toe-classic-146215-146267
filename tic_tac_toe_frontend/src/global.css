@@ -1,15 +1,37 @@
 /**
- * WHAT IS THIS FILE?
- *
- * Globally applied styles for the ultralight Qwik template.
- * Uses a minimalistic light theme with specified color scheme.
+ * Global styles - Ocean Professional theme
+ * Modern, clean, rounded corners, subtle shadows, minimalist.
+ * Primary: #2563EB (blue)
+ * Accent: #F59E0B (amber)
+ * Background: #f9fafb
+ * Surface: #ffffff
+ * Text: #111827
  */
 
 :root {
-  --primary-color: #000000;
-  --secondary-color: #333333;
-  --accent-color: #0078d4;
-  --background-color: #ffffff;
+  --color-primary: #2563eb;
+  --color-accent: #f59e0b;
+  --color-error: #ef4444;
+  --color-bg: #f9fafb;
+  --color-surface: #ffffff;
+  --color-text: #111827;
+  --color-muted: #6b7280;
+  --ring: 0 0 0 3px rgba(37, 99, 235, 0.3);
+
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 10px;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 6px 24px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+
+  --transition: 180ms cubic-bezier(.2,.8,.2,1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 html {
@@ -26,16 +48,153 @@ html {
     Arial,
     "Noto Sans",
     sans-serif;
+  color: var(--color-text);
+  background: linear-gradient(180deg, rgba(37,99,235,0.06), rgba(249,250,251,0)) no-repeat,
+    var(--color-bg);
+  min-height: 100%;
 }
 
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--background-color);
-  color: var(--primary-color);
+  background-color: transparent;
+  color: var(--color-text);
   line-height: inherit;
 }
 
-* {
-  box-sizing: border-box;
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+}
+
+/* Utility containers */
+.container {
+  margin: 0 auto;
+  padding: 1.25rem;
+  max-width: 960px;
+}
+
+.card-surface {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(17,24,39,0.06);
+}
+
+.btn {
+  appearance: none;
+  border: none;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition), opacity var(--transition);
+  box-shadow: var(--shadow-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-sm), var(--ring);
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, #2f6ef0, #2563eb);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(37,99,235,0.25);
+}
+
+.btn-secondary {
+  background: linear-gradient(180deg, #fbbf24, #f59e0b);
+  color: #1f2937;
+}
+
+.btn-secondary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(245,158,11,0.25);
+}
+
+.btn-quiet {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid rgba(17,24,39,0.08);
+}
+
+.btn-quiet:hover {
+  background: rgba(17,24,39,0.04);
+}
+
+/* Page layout */
+.app-shell {
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.app-header {
+  padding: 1.25rem 1rem 0.5rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  user-select: none;
+}
+
+.brand__logo {
+  height: 40px;
+  width: 40px;
+  border-radius: 12px;
+  background: conic-gradient(from 180deg at 50% 50%, rgba(37, 99, 235, .5), rgba(37, 99, 235, .15), rgba(245, 158, 11, .45), rgba(37, 99, 235, .5));
+  position: relative;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.6), 0 10px 20px rgba(37,99,235,0.15);
+}
+
+.brand__title {
+  font-size: 1.1rem;
+  letter-spacing: 0.3px;
+  color: var(--color-text);
+}
+
+.app-main {
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+}
+
+/* Footer */
+.app-footer {
+  padding: 1rem 1.25rem 2rem;
+  color: var(--color-muted);
+  font-size: .9rem;
+  text-align: center;
+}
+
+/* Animations */
+.fade-in {
+  animation: fadeIn var(--transition) ease-out both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }

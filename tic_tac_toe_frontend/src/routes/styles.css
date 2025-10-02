@@ -1,37 +1,36 @@
-/**
- * Ultralight template styles - minimal and clean
- */
+/* Route styles refined for Tic Tac Toe */
 
-.page-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 2rem;
+.board .cell {
+  outline: none;
 }
 
-.main-title {
-  font-size: 3rem;
-  font-weight: 300;
-  text-align: center;
-  color: var(--primary-color);
-  margin: 0;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
+.board .cell:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.05);
+  border-color: rgba(17,24,39,0.12);
+  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.94));
 }
 
-@media (max-width: 768px) {
-  .main-title {
-    font-size: 2rem;
-  }
-  
-  .page-container {
-    padding: 1rem;
-  }
+.board .cell:focus-visible {
+  box-shadow: var(--shadow-md), var(--ring);
 }
 
-@media (max-width: 480px) {
-  .main-title {
-    font-size: 1.5rem;
-  }
+.board .cell--x {
+  color: #1e3a8a;
+  background: linear-gradient(180deg, rgba(37,99,235,0.06), rgba(255,255,255,0.96));
+}
+
+.board .cell--o {
+  color: #7c2d12;
+  background: linear-gradient(180deg, rgba(245,158,11,0.08), rgba(255,255,255,0.96));
+}
+
+.cell__content {
+  transform: translateZ(0);
+  transition: transform var(--transition), opacity var(--transition);
+}
+
+.board .cell:active:not(:disabled) .cell__content {
+  transform: scale(0.98);
+  opacity: .96;
 }
