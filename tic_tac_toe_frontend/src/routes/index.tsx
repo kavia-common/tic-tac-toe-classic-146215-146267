@@ -13,6 +13,77 @@ import type { DocumentHead } from "@builder.io/qwik-city";
 type Player = "X" | "O";
 type Board = (Player | null)[];
 
+/** Simple inlined, theme-aware SVG icons for players */
+// PUBLIC_INTERFACE
+export const KnightIcon = component$<{ title?: string; color?: string }>(
+  ({ title = "Knight", color = "#1e40af" }) => (
+    <svg
+      viewBox="0 0 64 64"
+      role="img"
+      aria-label={title}
+      width="80%"
+      height="80%"
+      style="display:block"
+    >
+      <title>{title}</title>
+      <defs>
+        <linearGradient id="k-body" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(37,99,235,0.25)" />
+          <stop offset="100%" stop-color="rgba(255,255,255,0.9)" />
+        </linearGradient>
+      </defs>
+      <g fill={color} stroke={color} stroke-width="1.5">
+        <path
+          fill="url(#k-body)"
+          d="M20 50h22c1.7 0 3 1.3 3 3v4H17v-4c0-1.7 1.3-3 3-3z"
+          opacity="0.85"
+        />
+        <path
+          d="M42 44c0 2-2 4-4 4H22c-2.2 0-4-1.8-4-4 0-1.4.8-2.7 2-3.4 2.5-1.4 4.1-2.6 5.1-5.7l2.1-6.4-3.3-2.7c-1.1-.9-1.5-2.4-.9-3.7l2.1-4.3c.6-1.3 1.9-2.1 3.4-2 2.1.1 4.6.9 7.7 2.6 1.6.9 2.9 2.1 3.8 3.7 1 1.8 1.9 4.1 1.9 6.1 0 2.8-1.3 4.9-3.1 6.4 1.6 1.2 2.1 3 2.1 5z"
+          fill={color}
+          opacity="0.95"
+        />
+        <circle cx="33" cy="25" r="1.6" fill="#0b1324" />
+      </g>
+    </svg>
+  ),
+);
+
+// PUBLIC_INTERFACE
+export const QueenIcon = component$<{ title?: string; color?: string }>(
+  ({ title = "Queen", color = "#7c2d12" }) => (
+    <svg
+      viewBox="0 0 64 64"
+      role="img"
+      aria-label={title}
+      width="82%"
+      height="82%"
+      style="display:block"
+    >
+      <title>{title}</title>
+      <defs>
+        <linearGradient id="q-body" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(245,158,11,0.28)" />
+          <stop offset="100%" stop-color="rgba(255,255,255,0.92)" />
+        </linearGradient>
+      </defs>
+      <g fill={color} stroke={color} stroke-width="1.5">
+        <path
+          d="M20 50h24c1.7 0 3 1.3 3 3v4H17v-4c0-1.7 1.3-3 3-3z"
+          fill="url(#q-body)"
+          opacity="0.85"
+        />
+        <path
+          d="M32 18l5 7 7-5-2 11 6 4-11 2-5 10-5-10-11-2 6-4-2-11 7 5 5-7z"
+          fill={color}
+          opacity="0.95"
+        />
+        <circle cx="32" cy="16" r="2.2" fill={color} />
+      </g>
+    </svg>
+  ),
+);
+
 const WIN_LINES: number[][] = [
   [0, 1, 2],
   [3, 4, 5],
@@ -186,7 +257,9 @@ export const GameBoard = component$<GameBoardProps>(
           <button
             key={i}
             role="gridcell"
-            aria-label={`Cell ${i + 1}, ${cell ? cell : "empty"}`}
+            aria-label={`Cell ${i + 1}, ${
+              cell === "X" ? "Knight" : cell === "O" ? "Queen" : "empty"
+            }`}
             class={[
               "cell",
               cell === "X" ? "cell--x" : "",
@@ -198,7 +271,18 @@ export const GameBoard = component$<GameBoardProps>(
             onClick$={() => onCellClick$(i)}
             style={cellButtonStyle(cell)}
           >
-            <span class="cell__content">{cell ?? ""}</span>
+            <span class="cell__content" aria-hidden={cell ? "false" : "true"}>
+              {cell === "X" ? (
+                <KnightIcon
+                  title="Knight"
+                  color="#1e3a8a"
+                />
+              ) : cell === "O" ? (
+                <QueenIcon title="Queen" color="#7c2d12" />
+              ) : (
+                ""
+              )}
+            </span>
           </button>
         ))}
       </div>
@@ -268,7 +352,8 @@ export const GameStatus = component$<GameStatusProps>(
               box-shadow: var(--shadow-sm);
               border: 1px solid rgba(17,24,39,0.06);
             `}
-            aria-label={`Current player ${currentPlayer}`}
+            aria-label={`Current player ${currentPlayer === "X" ? "Knight" : "Queen"}`}
+            title={`Current player: ${currentPlayer === "X" ? "Knight" : "Queen"}`}
           >
             <span
               style={`
@@ -284,7 +369,14 @@ export const GameStatus = component$<GameStatusProps>(
               `}
               aria-hidden="true"
             />
-            {currentPlayer}
+            {/* Replace letter with tiny icon for consistency */}
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;">
+              {currentPlayer === "X" ? (
+                <KnightIcon title="Knight" color="#1e3a8a" />
+              ) : (
+                <QueenIcon title="Queen" color="#7c2d12" />
+              )}
+            </span>
           </div>
         )}
       </div>
@@ -390,15 +482,10 @@ function cellButtonStyle(cell: Player | null): string {
     box-shadow: var(--shadow-md);
     transition: transform var(--transition), box-shadow var(--transition), background var(--transition), border-color var(--transition), color var(--transition);
     display: grid; place-items: center;
-    font-size: clamp(2.2rem, 7vw, 2.8rem);
-    font-weight: 800;
-    letter-spacing: .05em;
     cursor: pointer;
-    color: ${cell === "X" ? "#1e40af" : cell === "O" ? "#92400e" : "var(--color-text)"};
     user-select: none;
-  `;
-  const hover = `
-    will-change: transform;
+    /* icon container sizing */
+    padding: 6%;
   `;
   const disabled =
     cell !== null
@@ -408,7 +495,7 @@ function cellButtonStyle(cell: Player | null): string {
   `
       : "";
 
-  return base + hover + disabled;
+  return base + disabled;
 }
 
 export const head: DocumentHead = {
